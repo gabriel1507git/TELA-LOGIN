@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel de Login</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 50%,
+          #f093fb 100%
+        );
+        background-size: 300% 300%;
+        animation: gradientShift 8s ease infinite;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 1px,
+          transparent 1px
+        );
+        background-size: 50px 50px;
+        animation: movePattern 20s linear infinite;
+        pointer-events: none;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      @keyframes movePattern {
+        0% {
+          transform: translate(0, 0);
+        }
+        100% {
+          transform: translate(50px, 50px);
+        }
+      }
+
+      .login-container {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(25px);
+        border-radius: 25px;
+        padding: 45px;
+        width: 100%;
+        max-width: 450px;
+        box-shadow: 0 35px 80px rgba(0, 0, 0, 0.25),
+          0 0 0 1px rgba(255, 255, 255, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      .login-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(
+          90deg,
+          #ff6b6b,
+          #4ecdc4,
+          #45b7d1,
+          #96ceb4,
+          #feca57
+        );
+        background-size: 200% 200%;
+        animation: rainbowShift 3s ease infinite;
+      }
+
+      .login-container::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: conic-gradient(
+          from 0deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        animation: rotate 10s linear infinite;
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      @keyframes rainbowShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .login-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .login-title {
+        font-size: 32px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 8px;
+        text-align: center;
+        background-size: 200% 200%;
+        animation: gradientText 4s ease infinite;
+      }
+
+      .login-subtitle {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 15px;
+        font-weight: 400;
+      }
+
+      @keyframes gradientText {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .form-group {
+        margin-bottom: 24px;
+        position: relative;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 8px;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 16px 18px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        font-size: 16px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        color: rgb(255, 255, 255);
+        transition: all 0.4s ease;
+        outline: none;
+      }
+
+      .form-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .form-input:focus {
+        border-color: rgba(255, 255, 255, 0.6);
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1),
+          0 0 30px rgba(238, 123, 123, 0.3);
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .form-input.error {
+        border-color: #e53e3e;
+        animation: shake 0.5s ease-in-out;
+      }
+
+      .form-input.success {
+        border-color: #38a169;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+      }
+
+      .password-strength {
+        margin-top: 12px;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      .password-strength.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .password-strength.weak {
+        background: rgba(229, 62, 62, 0.1);
+        color: #e53e3e;
+        border: 1px solid rgba(229, 62, 62, 0.2);
+      }
+
+      .password-strength.strong {
+        background: rgba(56, 161, 105, 0.1);
+        color: #38a169;
+        border: 1px solid rgba(56, 161, 105, 0.2);
+      }
+
+      .requirements {
+        margin-top: 12px;
+        padding: 16px;
+        background: #f7fafc;
+        border-radius: 8px;
+        font-size: 12px;
+        transition: all 0.3s ease;
+      }
+
+      .requirement {
+        display: flex;
+        align-items: center;
+        margin-bottom: 6px;
+        transition: all 0.3s ease;
+      }
+
+      .requirement:last-child {
+        margin-bottom: 0;
+      }
+
+      .requirement-icon {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        margin-right: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        transition: all 0.3s ease;
+      }
+
+      .requirement.met .requirement-icon {
+        background: #38a169;
+        color: white;
+      }
+
+      .requirement:not(.met) .requirement-icon {
+        background: #e2e8f0;
+        color: #68758a;
+      }
+
+      .requirement.met {
+        color: #38a169;
+      }
+
+      .requirement:not(.met) {
+        color: #63728a;
+      }
+
+      .login-button {
+        width: 100%;
+        padding: 18px;
+        background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
+        background-size: 200% 200%;
+        border: none;
+        border-radius: 15px;
+        color: white;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        animation: buttonGradient 3s ease infinite;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      }
+
+      @keyframes buttonGradient {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .login-button:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        animation-duration: 1s;
+      }
+
+      .login-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+        animation: none;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .login-button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.4),
+          transparent
+        );
+        transition: left 0.6s;
+      }
+
+      .login-button:hover::before {
+        left: 100%;
+      }
+
+      .eye-icon {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.7);
+        transition: all 0.3s ease;
+        user-select: none;
+        font-size: 20px;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+      }
+
+      .eye-icon:hover {
+        color: rgba(255, 255, 255, 1);
+        transform: translateY(-50%) scale(1.1);
+      }
+
+      .success-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.5s ease;
+      }
+
+      .success-modal.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .success-content {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(25px);
+        padding: 40px;
+        border-radius: 25px;
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 35px 80px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transform: scale(0.7) translateY(50px);
+        transition: all 0.5s ease;
+      }
+
+      .success-modal.show .success-content {
+        transform: scale(1) translateY(0);
+      }
+
+      .success-icon {
+        font-size: 80px;
+        margin-bottom: 20px;
+        animation: bounceIn 0.8s ease;
+      }
+
+      .success-title {
+        font-size: 28px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 10px;
+        background: linear-gradient(135deg, #4ecdc4, #44e08e);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .success-message {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 16px;
+        margin-bottom: 30px;
+      }
+
+      .success-button {
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #4ecdc4, #44e08e);
+        border: none;
+        border-radius: 25px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .success-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(68, 224, 142, 0.3);
+      }
+
+      @keyframes bounceIn {
+        0% {
+          transform: scale(0);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* Loading state for button */
+      .login-button.loading {
+        pointer-events: none;
+      }
+
+      .login-button.loading::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        margin: -10px 0 0 -10px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top: 2px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .login-container {
+          padding: 30px 25px;
+          margin: 10px;
+        }
+
+        .login-title {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="login-header">
+        <h1 class="login-title">Bem-vindo</h1>
+        <p class="login-subtitle">Faça login em sua conta</p>
+      </div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            id="email"
+            class="form-input"
+            placeholder="seu@email.com"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">Senha</label>
+          <div style="position: relative">
+            <input
+              type="password"
+              id="password"
+              class="form-input"
+              placeholder="Digite sua senha"
+              required
+            />
+            <span class="eye-icon" id="togglePassword">👁</span>
+          </div>
+
+          <div class="password-strength" id="strengthIndicator"></div>
+
+          <div class="requirements" id="requirements">
+            <div class="requirement" id="length">
+              <span class="requirement-icon">•</span>
+              <span>Mínimo 8 caracteres</span>
+            </div>
+            <div class="requirement" id="uppercase">
+              <span class="requirement-icon">•</span>
+              <span>Uma letra maiúscula</span>
+            </div>
+            <div class="requirement" id="special">
+              <span class="requirement-icon">•</span>
+              <span>Um caractere especial</span>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="login-button" id="loginBtn" disabled>
+          Entrar
+        </button>
+      </form>
+    </div>
+
+    <div class="success-modal" id="successModal">
+      <div class="success-content">
+        <div class="success-icon">🎉</div>
+        <h2 class="success-title">Sucesso!</h2>
+        <p class="success-message">
+          Login realizado com sucesso! Bem-vindo de volta.
+        </p>
+        <button class="success-button" onclick="closeSuccessModal()">
+          Continuar
+        </button>
+      </div>
+    </div>
+
+    <script>
+      const passwordInput = document.getElementById("password");
+      const togglePassword = document.getElementById("togglePassword");
+      const strengthIndicator = document.getElementById("strengthIndicator");
+      const loginBtn = document.getElementById("loginBtn");
+      const requirements = {
+        length: document.getElementById("length"),
+        uppercase: document.getElementById("uppercase"),
+        special: document.getElementById("special"),
+      };
+
+      togglePassword.addEventListener("click", function () {
+        const type =
+          passwordInput.getAttribute("type") === "password"
+            ? "text"
+            : "password";
+        passwordInput.setAttribute("type", type);
+        this.textContent = type === "password" ? "👁" : "👁";
+      });
+
+      passwordInput.addEventListener("input", function () {
+        const password = this.value;
+        const checks = {
+          length: password.length >= 8,
+          uppercase: /[A-Z]/.test(password),
+          special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+        };
+
+        Object.keys(checks).forEach((key) => {
+          if (checks[key]) {
+            requirements[key].classList.add("met");
+            requirements[key].querySelector(".requirement-icon").textContent =
+              "✓";
+          } else {
+            requirements[key].classList.remove("met");
+            requirements[key].querySelector(".requirement-icon").textContent =
+              "•";
+          }
+        });
+
+        const allMet = Object.values(checks).every((check) => check);
+
+        if (password.length > 0) {
+          strengthIndicator.classList.add("show");
+
+          if (allMet) {
+            strengthIndicator.textContent = "✓ Senha forte";
+            strengthIndicator.className = "password-strength show strong";
+            passwordInput.classList.remove("error");
+            passwordInput.classList.add("success");
+            loginBtn.disabled = false;
+          } else {
+            strengthIndicator.textContent = "⚠ Senha fraca";
+            strengthIndicator.className = "password-strength show weak";
+            passwordInput.classList.add("error");
+            passwordInput.classList.remove("success");
+            loginBtn.disabled = true;
+          }
+        } else {
+          strengthIndicator.classList.remove("show");
+          passwordInput.classList.remove("error", "success");
+          loginBtn.disabled = true;
+        }
+      });
+
+      function closeSuccessModal() {
+        document.getElementById("successModal").classList.remove("show");
+
+        document.getElementById("loginForm").reset();
+        passwordInput.classList.remove("error", "success");
+        strengthIndicator.classList.remove("show");
+        loginBtn.disabled = true;
+
+        Object.keys(requirements).forEach((key) => {
+          requirements[key].classList.remove("met");
+          requirements[key].querySelector(".requirement-icon").textContent =
+            "•";
+        });
+      }
+
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          const loginBtn = document.getElementById("loginBtn");
+
+          if (!email || !email.includes("@")) {
+            alert("Por favor, insira um email válido!");
+            return;
+          }
+
+          loginBtn.classList.add("loading");
+          const originalText = loginBtn.textContent;
+          loginBtn.textContent = "";
+
+          setTimeout(() => {
+            loginBtn.classList.remove("loading");
+            loginBtn.textContent = originalText;
+
+            const modal = document.getElementById("successModal");
+            modal.classList.add("show");
+            console.log("Modal should be showing now");
+          }, 2000);
+        });
+
+      document.querySelectorAll(".form-input").forEach((input) => {
+        input.addEventListener("focus", function () {
+          this.parentElement.style.transform = "scale(1.02)";
+        });
+
+        input.addEventListener("blur", function () {
+          this.parentElement.style.transform = "scale(1)";
+        });
+      });
+    </script>
+  </body>
+</html>
